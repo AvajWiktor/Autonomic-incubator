@@ -68,19 +68,19 @@ char Received_msg[9];
 /* Set point values*/
 uint8_t T_int= 18; //Temperatura
 uint16_t L = 1000; //Natezenie swiatla w LUX
-uint8_t H = 70; //Wilgotnosc w $
+uint8_t H = 70; //Wilgotnosc w %
 
 /* PRZYPISANIE WARTOSCI POSZCZEGOLNYCH CZLONOW REGULATORA */
-float Kp = 0.25f; // cz³on proporcjonalny 
-float Kd = 0.001f; // cz³on ca³kuj¹cy
-float Ki = 0.08f; // cz³on ró¿niczkuj¹cy
+float Kp = 0.25f; // czlon proporcjonalny 
+float Kd = 0.001f; // czlon calkujacy
+float Ki = 0.08f; // czlon rozniczkujacy
 
 /* INSTANCJA PID */
-arm_pid_instance_f32 light_PID; // instancja PID œwiat³a 
+arm_pid_instance_f32 light_PID; // instancja PID swiatla 
 
 //i2c variables*******************************
 int BH1750_int = 0; // wartosc pomiaru swiatla
-int Uart_data[12]; // zmienna przechowuj¹ca wiadomosc do wyslania portem szeregowym
+int Uart_data[12]; // zmienna przechowujaca wiadomosc do wyslania portem szeregowym
 char LCD_msg[16]; // wiadomosc do wyswietlenia na LCD
 uint8_t i2c_size; // rozmiar wiadomosci
 //********************************************
@@ -114,7 +114,7 @@ int8_t rslt;
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
-//funkcja odczytuj¹ca wartoœci z czujnika temperatury
+//funkcja odczytujaca wartosci z czujnika temperatury
 int8_t spi_reg_read(uint8_t cs, uint8_t reg_addr , uint8_t *reg_data , uint16_t length)
 {
   HAL_StatusTypeDef status = HAL_OK;
@@ -264,7 +264,7 @@ int main(void)
 	  BH1750_int = ReadData();
 	  SetValue(L, BH1750_int, &light_PID);
 
-	  //za³¹czanie wiatraka gdy temp jest wy¿sza ni¿ zadana 
+	  //zalaczanie wiatraka gdy temp jest wyzsza niz zadana 
 	  	    if(temp1 > T_int)
 	  	    {
 	  	    	
@@ -275,7 +275,7 @@ int main(void)
 	  	    	
 	  	    	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
 	  	    }
-	//za³¹czanie pompy wody, gdy wilgotnoœæ jest zbyy ma³a
+	//zalaczanie pompy wody, gdy wilgotnosc jest zbyt mala
 	  	    if(adc_value < H)
 	  	    {
 	  	    	
@@ -385,9 +385,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim->Instance == TIM4)
 		{
 
-			adc_value = 0.714*(4200.0 - adc_data)/21.0; //konwersja wartoœci analogowej na u¿yteczne dane 
+			adc_value = 0.714*(4200.0 - adc_data)/21.0; //konwersja wartosci analogowej na uzyteczne dane 
 
-			RefreshLCD_3v(temperatura, adc_value, BH1750_int); //odœwie¿enie danych na wyœwietlaczu
+			RefreshLCD_3v(temperatura, adc_value, BH1750_int); //odswiezenie danych na wyswietlaczu
 
 			i2c_size = sprintf(Uart_data, "L:%d,H:%d,T:%.2f\n\r", BH1750_int, adc_value, temperatura); 
 
