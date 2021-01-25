@@ -408,7 +408,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	value1[0] = Received_msg[0];
 	value1[1] = Received_msg[1];
 	value1[2] = Received_msg[2];
-	value1[2] = Received_msg[3];
+	value1[3] = Received_msg[3];
 
 	value2[0] = Received_msg[4];
 	value2[1] = Received_msg[5];
@@ -418,7 +418,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	value3[1] = Received_msg[8];
 
 
-	value_i1 = 10*(atoi(value1));
+	value_i1 = (atoi(value1));
 	value_i2 = (atoi(value2));
 	value_i3= (atoi(value3));
 
