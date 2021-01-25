@@ -1,0 +1,4 @@
+M_M_functions.c:5:6:SetValue	40	static
+M_M_functions.c:30:5:ReadData	16	static
+M_M_functions.c:41:6:RefreshLCD	40	static
+M_M_functions.c:63:6:RefreshLCD_3v	64	static
