@@ -66,48 +66,36 @@
 char Received_msg[9];
 
 /* Set point values*/
-float T = 18.0;
-uint8_t T_int= 18;
-uint16_t L = 1000;
-uint8_t H = 70;
-uint8_t is2Hot = 0;
-uint8_t isDry = 0;
-uint8_t isDark = 0;
-
-/* */
-uint8_t bool = 0;
+uint8_t T_int= 18; //Temperatura
+uint16_t L = 1000; //Natezenie swiatla w LUX
+uint8_t H = 70; //Wilgotnosc w $
 
 /* PRZYPISANIE WARTOSCI POSZCZEGOLNYCH CZLONOW REGULATORA */
-float Kp = 0.25f;
-float Kd = 0.001f;
-float Ki = 0.08f;
+float Kp = 0.25f; // cz³on proporcjonalny 
+float Kd = 0.001f; // cz³on ca³kuj¹cy
+float Ki = 0.08f; // cz³on ró¿niczkuj¹cy
 
 /* INSTANCJA PID */
-arm_pid_instance_f32 light_PID;
-arm_pid_instance_f32 temperature_PID;
-
+arm_pid_instance_f32 light_PID; // instancja PID œwiat³a 
 
 //i2c variables*******************************
-int BH1750_int = 0;
-int Setpoint = 0;
-int Uart_data[12];
-char LCD_msg[16];
-uint8_t i2c_size;
+int BH1750_int = 0; // wartosc pomiaru swiatla
+int Uart_data[12]; // zmienna przechowuj¹ca wiadomosc do wyslania portem szeregowym
+char LCD_msg[16]; // wiadomosc do wyswietlenia na LCD
+uint8_t i2c_size; // rozmiar wiadomosci
 //********************************************
 //ADC variables*******************************
 
-uint16_t adc_value;
-uint16_t adc_data;
-char adc_buffer[40];
-uint8_t adc_size;
+uint16_t adc_value; //wartosc odczytu temperatury
+uint16_t adc_data; //dane z czujnika
 
 
 //********************************************
 
 //spi variables*******************************
-float temperatura = 0.0;
+float temperatura = 0.0; //dane dla LCD
 
-int8_t rslt;
+int8_t rslt; 
 	   struct bmp280_dev bmp;
 	   struct bmp280_config conf;
 	   struct bmp280_uncomp_data ucomp_data;
@@ -125,42 +113,8 @@ int8_t rslt;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void handlePID(){
-	 if(BH1750_int < 100)
-		  	   {
-		  		   HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_RESET);
-		  		   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-		  		   HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
-		  		 __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 1000);
-		  	   }
-		  	   else if(BH1750_int < 300 && BH1750_int >= 100)
-		  	   {
-		  		 __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 0);
-		  		   HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-		  		   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-		  		   HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
-		  		 __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 800);
-		  	   }
-		  	   else if(BH1750_int < 500 && BH1750_int >= 300)
-		  	  	   {
 
-		  	  		   HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-		  	  		   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-		  	  		   HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
-		  	  		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 500);
-		  	  	   }
-		  	   else if(BH1750_int >= 1000)
-		  	  	   {
-		  	  		   HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-		  	  		   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-		  	  		   HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
-
-		  	  		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, 300);
-		  	  	   }
-}
-
-
-
+//funkcja odczytuj¹ca wartoœci z czujnika temperatury
 int8_t spi_reg_read(uint8_t cs, uint8_t reg_addr , uint8_t *reg_data , uint16_t length)
 {
   HAL_StatusTypeDef status = HAL_OK;
@@ -183,6 +137,7 @@ int8_t spi_reg_read(uint8_t cs, uint8_t reg_addr , uint8_t *reg_data , uint16_t 
  }
  return (int8_t)iError;
 }
+
 int8_t spi_reg_write(uint8_t cs, uint8_t reg_addr , uint8_t *reg_data , uint16_t length)
 {
 	HAL_StatusTypeDef status = HAL_OK;
@@ -304,50 +259,45 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /* Reading the raw data from sensor */
+	 
 
 	  BH1750_int = ReadData();
 	  SetValue(L, BH1750_int, &light_PID);
 
+	  //za³¹czanie wiatraka gdy temp jest wy¿sza ni¿ zadana 
 	  	    if(temp1 > T_int)
 	  	    {
-	  	    	is2Hot = 1;
+	  	    	
 	  	    	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 1000);
 	  	    }
 	  	    else
 	  	    {
-	  	    	is2Hot=0;
+	  	    	
 	  	    	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
 	  	    }
-
+	//za³¹czanie pompy wody, gdy wilgotnoœæ jest zbyy ma³a
 	  	    if(adc_value < H)
 	  	    {
-	  	    	isDry = 1;
+	  	    	
 	  	    	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 1000);
 	  	    }
 	  	    else
 	  	    {
-	  	    	isDry=0;
+	  	    	
 	  	    	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
 	  	    }
 
 
-
+			//odczyt danych z czujnika temp
 	         rslt = bmp280_get_uncomp_data(&ucomp_data, &bmp);
 	         rslt = bmp280_get_comp_temp_double(&temp, ucomp_data.uncomp_temp, &bmp);
 
 	         temp1 = temp;
 	         temperatura = temp1;
-	         //size = sprintf(buffer, "  %.2f [C]  ", temp1);
-	         //HAL_UART_Transmit(&huart3, (uint8_t*)buffer, size, 200);
-
+	         
 
 	         bmp.delay_ms(1000);
 	         timer++;
-
-
-
-	         //SetValue(Setpoint, BH1750_int, &light_PID);
 
 
 
@@ -419,11 +369,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_ADC_ConvCpltCallback (ADC_HandleTypeDef * hadc)
 {
-	//adc_value = HAL_ADC_GetValue(&hadc1);
-	//adc_value = 0.714*(4200.0 - adc_value)/21.0;
-	//adc_size = sprintf(adc_buffer, "  Value: %d [%%]\n\r  ", adc_value);
-	//HAL_UART_Transmit_IT(&huart3, (uint8_t*)adc_buffer, adc_size);
-	//HAL_ADC_Stop_DMA(&hadc1);
+	
 
 }
 
@@ -439,16 +385,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim->Instance == TIM4)
 		{
 
-			adc_value = 0.714*(4200.0 - adc_data)/21.0;
+			adc_value = 0.714*(4200.0 - adc_data)/21.0; //konwersja wartoœci analogowej na u¿yteczne dane 
 
-			RefreshLCD_3v(temperatura, adc_value, BH1750_int);
+			RefreshLCD_3v(temperatura, adc_value, BH1750_int); //odœwie¿enie danych na wyœwietlaczu
 
-			i2c_size = sprintf(Uart_data, "L:%d,H:%d,T:%.2f\n\r", BH1750_int, adc_value, temperatura);
+			i2c_size = sprintf(Uart_data, "L:%d,H:%d,T:%.2f\n\r", BH1750_int, adc_value, temperatura); 
 
-			HAL_UART_Transmit_IT(&huart3, (uint8_t*)Uart_data, i2c_size);
+			HAL_UART_Transmit_IT(&huart3, (uint8_t*)Uart_data, i2c_size); 
+			//transmisja danych po porcie szeregowym 
 
-			//adc_size = sprintf(adc_buffer, "  Value: %d [%%]\n\r  ", adc_value);
-			//HAL_UART_Transmit_IT(&huart3, (uint8_t*)adc_buffer, adc_size);
 
 		}
 
