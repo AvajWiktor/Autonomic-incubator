@@ -29,9 +29,5 @@ Project is created with:
 * 2x16 LCD Display - github.com/lamik library here
 	
 ## Setup
-To run this project, install it locally using npm:
-
-```
-$ cd ../lorem
-$ npm install
-$ npm start
+To run this project, install STM32CubeIDE version atleast 1.3.0, load project and connect to STM.
+RPI files can be found here https://github.com/AvajWiktor/Autonomic-incubator-server, paste it to your server folder path and connect RPI to stm32 by usb, RPI has to be connected with your wifi aswell.
