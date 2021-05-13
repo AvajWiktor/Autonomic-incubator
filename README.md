@@ -12,7 +12,7 @@ Project was created using:
 * C
 * Python
 * PHP
-* JavaScript
+* JavaScript + jQuery + AJAX
 * HTML/CSS
 * Raspbian
 * STM32CubeIDE version: 1.3.0
