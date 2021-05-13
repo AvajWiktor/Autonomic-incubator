@@ -3,6 +3,7 @@
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Web](#web)
+* [Results](#results)
 
 ## General info
 This is a prototype of an autonomous plant incubator based on STM32F746ZG microcontroller, connected to RPI based server.
@@ -37,4 +38,9 @@ RPI files can be found here https://github.com/AvajWiktor/Autonomic-incubator-se
 * Real Time data ploting![webpage3](https://user-images.githubusercontent.com/50246818/118187326-b0a88580-b436-11eb-93a9-d3dd2cf88389.jpg)
 * Real Time generated data table![webpage2](https://user-images.githubusercontent.com/50246818/118187328-b1d9b280-b436-11eb-9ab2-1f7579912103.jpg)
 * Configuration panel![webpage1](https://user-images.githubusercontent.com/50246818/118187332-b2724900-b436-11eb-81d3-1bb3a422f439.jpg)
+
+## Results
+* Classic growing process ![wynik2](https://user-images.githubusercontent.com/50246818/118188272-07fb2580-b438-11eb-935c-08afb00eb60a.JPG)
+* Autonomous incubator ![wynik1](https://user-images.githubusercontent.com/50246818/118188310-16494180-b438-11eb-91f0-0c35a094b08c.JPG)
+
 
