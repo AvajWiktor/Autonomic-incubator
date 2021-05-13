@@ -35,6 +35,6 @@ RPI files can be found here https://github.com/AvajWiktor/Autonomic-incubator-se
 
 ## Web
 * Real Time data ploting![webpage3](https://user-images.githubusercontent.com/50246818/118187326-b0a88580-b436-11eb-93a9-d3dd2cf88389.jpg)
-![webpage2](https://user-images.githubusercontent.com/50246818/118187328-b1d9b280-b436-11eb-9ab2-1f7579912103.jpg)
-![webpage1](https://user-images.githubusercontent.com/50246818/118187332-b2724900-b436-11eb-81d3-1bb3a422f439.jpg)
+* Real Time generated data table![webpage2](https://user-images.githubusercontent.com/50246818/118187328-b1d9b280-b436-11eb-9ab2-1f7579912103.jpg)
+* Configuration panel![webpage1](https://user-images.githubusercontent.com/50246818/118187332-b2724900-b436-11eb-81d3-1bb3a422f439.jpg)
 
