@@ -4,7 +4,7 @@
 * [Setup](#setup)
 
 ## General info
-This is prototype of autonomous plant incubator based on STM32F746ZG microcontroller, connected to RPI based server.
+This is a prototype of an autonomous plant incubator based on STM32F746ZG microcontroller, connected to RPI based server.
 	
 ## Technologies
 Project is created with:
